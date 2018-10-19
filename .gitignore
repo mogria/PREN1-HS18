@@ -89,3 +89,6 @@ ENV/
 .ropeproject
 *.npy
 *.pkl
+
+# the virtualenv is stored in here by direnv
+.direnv
