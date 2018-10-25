@@ -4,6 +4,7 @@
 let
   pythonPackages = pkgs.python36Packages;
   opencv3 = ( pkgs.opencv3.override {
+    protobuf = pkgs.protobuf3_5;
     enableGtk3 = true;
     enablePython = true;
     inherit pythonPackages;
