@@ -73,7 +73,7 @@ class DigitDetector:
             raise NotTrainedError()
 
         if image_file is None and image is None:
-            raise ValueError("image")
+            raise ValueError("no image or an image_file given")
 
         if image is None and image_file is not None:
             image = self.read_image(image_file)
