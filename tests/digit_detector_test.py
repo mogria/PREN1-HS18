@@ -44,6 +44,10 @@ def test_detect_digit(digit_detector):
 
 def test_detect_digit__no_model(digit_detector):
     with pytest.raises(NotTrainedError):
+        digit_detector.detect_digit("some_inexistent_file")
+
+def test_detect_digit__no_image(digit_detector):
+    with pytest.raises(NotTrainedError):
         digit_detector.detect_digit(None)
 
 def test_detect_digit__reload_model(digit_detector, tmpdir):
