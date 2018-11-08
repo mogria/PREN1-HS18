@@ -2,7 +2,7 @@
 
 
 let
-  pythonPackages = pkgs.python36Packages;
+  pythonPackages = pkgs.python35Packages;
   opencv3 = ( pkgs.opencv3.override {
     protobuf = pkgs.protobuf3_5;
     enableCuda = false;
