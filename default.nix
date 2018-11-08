@@ -15,7 +15,14 @@ in stdenv.mkDerivation rec {
   version = "0.0.1";
   propagatedBuildInputs = [
     ( pythonPackages.python.withPackages
-      (ps: [ ps.virtualenv (ps.toPythonModule opencv3) ] ) )
+      ( ps: with ps;
+        [
+          (toPythonModule opencv3)
+          pytest
+          numpy
+        ]
+      )
+    )
     opencv3
   ];
 }
