@@ -21,4 +21,4 @@ if [ "x${1:-}" == "xcomplete" ]; then
     echo "Deleting previous deployment:"
     ssh "$deploy_user_host" "test -n "\$HOME" && rm -rv '$deployment_folder'"
 fi
-rsync -avz --exclude-from="$d"/.gitignore --exclude .git "$d" $deploy_user_host:deployment
+rsync -avz --exclude-from="$d"/.gitignore --exclude .git "$d/" "$deploy_user_host:$deployment_folder/"
