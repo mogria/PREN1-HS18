@@ -92,3 +92,7 @@ ENV/
 
 # the virtualenv is stored in here by direnv
 .direnv
+
+
+# pytest
+.pytest_cache
