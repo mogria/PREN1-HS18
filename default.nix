@@ -24,5 +24,6 @@ in stdenv.mkDerivation rec {
       )
     )
     opencv3
+    pkgs.rsync
   ];
 }
