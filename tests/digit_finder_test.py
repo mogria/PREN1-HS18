@@ -1,14 +1,23 @@
 import pytest
 import numpy
-from mollyvision.digit_finder import DigitFinder
+import cv2
+from mollyvision.digit_finder import find_digit
+from mollyvision import imageutil
 
-@pytest.fixture
-def template():
-    return numpy.zeros((40, 40, 3))
+def raspicam_no_digit_images():
+    return imageutil.read_test_image_folder('uncut/raspicam/no_digit')
 
-@pytest.fixture
-def digit_finder(template):
-    return DigitFinder(template)
+def raspicam_digit_8_images():
+    return imageutil.read_test_image_folder('uncut/raspicam/8')
 
-def test_mask(template, digit_finder):
-    assert digit_finder.mask[template.shape.width / 2: template.shape.height / 2]
+@pytest.mark.parametrize('image', raspicam_no_digit_images())
+def test_find_no_digit(image):
+    img = cv2.imread(image)
+    assert find_digit(img) is None
+
+@pytest.mark.parametrize('image', raspicam_digit_8_images())
+def test_find_image(image):
+    img = cv2.imread(image)
+    result = find_digit(img)
+    assert result is not None
+
