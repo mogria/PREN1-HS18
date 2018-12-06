@@ -15,3 +15,9 @@ def read_image_folder(folder, recurse=False):
 
     # flatten 2d list into 1d, and make it unique
     return set(itertools.chain(*matches_list))
+
+""" reads all images files relative to the "test_images" folder."""
+def read_test_image_folder(folder, recurse=False):
+    this_dir = os.path.dirname(__file__)
+    test_images_dir = os.path.abspath(os.path.join(this_dir, "..", "test_images"))
+    return read_image_folder(os.path.join(test_images_dir, folder), recurse)

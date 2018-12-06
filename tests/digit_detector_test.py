@@ -5,14 +5,14 @@ from mollyvision import imageutil
 
 @pytest.fixture
 def training_files():
-    return imageutil.read_image_folder("test_images/digit_detection_train")
+    return imageutil.read_test_image_folder("digit_detection_train")
 
 # TODO: use other files for validation, but as of
 # now we don't have em, except the one we self cut
 @pytest.fixture
 def validation_files():
-    # return imageutil.read_image_folder("test_images/digit_detection_validation")
-    return imageutil.read_image_folder("test_images/digit_detection_train")
+    # return imageutil.read_image_folder("digit_detection_validation")
+    return imageutil.read_image_folder("digit_detection_train")
 
 @pytest.fixture
 def digit_detector():
