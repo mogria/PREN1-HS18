@@ -5,18 +5,18 @@ from mollyvision import imageutil
 
 @pytest.fixture
 def training_files():
-    return imageutil.read_test_image_folder("digit_detection_train")
+    return imageutil.read_test_image_folder("digit_detection_train", True)
 
 # TODO: use other files for validation, but as of
 # now we don't have em, except the one we self cut
 @pytest.fixture
 def validation_files():
-    # return imageutil.read_image_folder("digit_detection_validation")
-    return imageutil.read_image_folder("digit_detection_train")
+    return imageutil.read_image_folder("digit_detection_validation", True)
+    # return imageutil.read_image_folder("digit_detection_train")
 
 @pytest.fixture
 def digit_detector():
-    return DigitDetector(500);
+    return DigitDetector(100);
 
 @pytest.fixture
 def trained_digit_detector(digit_detector, training_files):
@@ -24,12 +24,12 @@ def trained_digit_detector(digit_detector, training_files):
     return digit_detector
 
 def test_get_label(digit_detector):
-    assert 0 == digit_detector.get_label("somedir1/0.jpg")
+    assert 0 == digit_detector.get_label("somedir0/0.jpg")
     assert 1 == digit_detector.get_label("somedir1/1.jpg")
-    assert 8 == digit_detector.get_label("somedir1/8someothertext.jpg")
-    assert 9 == digit_detector.get_label("somedir1/sometext9.jpg")
-    assert 7 == digit_detector.get_label("somedir1/testtest7smeothertext.jpg")
-    assert None == digit_detector.get_label("somedir1/testtestsmeothertext.jpg")
+    assert 8 == digit_detector.get_label("somedir8/98someothertext.jpg")
+    assert 9 == digit_detector.get_label("some9dir/sometext9.jpg")
+    assert 7 == digit_detector.get_label("7somedir/6testtest7smeothertext.jpg")
+    assert None == digit_detector.get_label("somedir/testtestsmeothertext.jpg")
 
 def test_model_resolution():
     pass

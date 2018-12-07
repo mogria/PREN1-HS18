@@ -23,12 +23,13 @@ class DigitDetector:
     def read_image(self, image_file):
         return cv2.imread(image_file, cv2.IMREAD_GRAYSCALE)
 
-    """ get the label from the filename of the image file
-        e.g. if it contains a 0 then the label is 0, etc. for any digit """
+    """ get the label from the filename of the image file by looking
+        at the directory where it resides.
+        e.g. if the directory contains a 0 then the label is 0, etc. for any digit """
     def get_label(self, imagefile):
-        filename = os.path.basename(imagefile)
+        dirname = os.path.basename(os.path.dirname(imagefile))
         for digit in self.DIGITS:
-            if str(digit) in filename:
+            if str(digit) in dirname:
                 return digit
 
         return None
@@ -168,7 +169,7 @@ def main(argv):
         else:
             print("Creating model output directory", argv[3])
             os.makedirs(argv[3])
-        image_files = imageutil.read_image_folder(argv[2])
+        image_files = imageutil.read_image_folder(argv[2], True)
         print("Training with the following image files")
         for f in image_files:
             print("-", f)
@@ -181,7 +182,7 @@ def main(argv):
         print("Loading model from directory", argv[2])
         digit_detector.load_model(argv[2])
         print("Loading files from directory", argv[3])
-        image_files = imageutil.read_image_folder(argv[3])
+        image_files = imageutil.read_image_folder(argv[3], True)
         for image_file in image_files:
             print(image_file + ":", digit_detector.detect_digit(image_file=image_file))
     else:
