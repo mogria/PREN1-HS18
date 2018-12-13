@@ -1,0 +1,79 @@
+Building Python
+---------------
+
+Because Python 3.6 is not yet available in the standard rasbian repos,
+we built it manually:
+
+    cd ~/Python-3.6.7/ && ./configure --enable-optimizations \
+      && make && sudo make install
+
+It will try to run a long test suite after building with make. You can
+just abort it or find the ./configure flag to disable it.
+
+
+Python virtualenv
+-----------------
+
+Run `source virtualenvs/mollyvision/bin/activate` to load the python3
+virtualenv.
+
+It was created using the command:
+
+    virtualenv -p /usr/local/bin/python3.6 --system-site-packages \
+      ~/virtualenvs/mollyvision
+
+And it uses the own compiled python. `--system-site-packages` was passed
+for OpenCV to be acessible
+after installing it to the system. Else some manual hackery (e.g. copying
+some files around) would be necessary
+in order for python to find the opencv module & shared libraries it needs.
+
+
+Building OpenCV
+---------------
+
+Make sure to be in the virtualenv _before_ you build opencv for the python
+bindings to be found. You should see in your prompt something like:
+
+    (mollyvision) pi@mollyvision:~ $ 
+
+To build, run `opencv-3.4.3/build/cmake-command.sh`, maybe set other
+options with the -D flags inside the file then delete all files except the
+`cmake-command.sh`, because CMake caches it's result after being run once.
+
+Be aware that when you've created a new virtualenv that numpy should
+be installed into it in order for `cmake-command.sh` to pick up the
+python correctly.
+
+Then run `make && sudo make install` in `opencv-3.4.3/build` to build and 
+install OpenCV.
+
+Complete build instructions:
+
+https://www.pyimagesearch.com/2018/09/26/install-opencv-4-on-your-raspberry-pi/
+
+Using RS232
+-----------
+
+The Port first needs to be enabled via `sudo raspi-config`. 5 Interface options. Disable the linux console over serial, but enable the serial port.
+
+
+There is a python module called 'pyserial', install it via pip into the virtualenv.
+
+Then open and read/write to the port as follows.
+
+
+```
+import serial
+s = serial.Serial('/dev/ttyS0', 9600) # baud rate = 9600, default parity settings
+s.read(10) # read 10 byte, blocking
+s.write(b"some bytes") # write some bytes b"" is required because unicode is not supported
+```
+
+Do the same thing on the other side. I did it with python as well on my linux machine and the USB to RS232 converter appeared as /dev/ttyUSB0.
+
+Using the Raspberry PI Cam
+--------------------------
+
+Make sure it's connected correctly and it's connected the right way arround! Then run ``sudo raspi-config``, go to Interfacing Options and enable the camera there. Then reboot.
+It should work then. You can use the RapberryPi Camera command line tools like `raspistill` to check whether the camera works.
