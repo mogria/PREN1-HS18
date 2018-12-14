@@ -1,6 +1,7 @@
 import cv2
 import numpy
 import time
+import os
 
 # cv2.matchTemplate() might also be an option if we know how far
 # and from what perspective we see the digit. Eg:
@@ -80,9 +81,10 @@ def find_digit(image):
     # https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_imgproc/py_thresholding/py_thresholding.html#otsus-binarization
     # but keep in mind the better the threshold (and the input image)
     # the faster the algorihm, because a lot more wrong contours
-    # will be found.
-    thres, im_thresh = cv2.threshold(im_bw, 75, 255, cv2.THRESH_BINARY)
-    cv2.imwrite('threshold.jpg', im_thresh)
+    # will be found. also adjusting the threshold will often lead the the
+    # digit being detected, (then the threshold only sees the whitest part!)
+    thres, im_thresh = cv2.threshold(im_bw, 168, 255, cv2.THRESH_BINARY)
+    # cv2.imwrite(os.path.join(sys.argv[2], 'threshold.jpg'), im_thresh)
     # im_thresh = cv2.adaptiveThreshold(im_bw, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11,2)
     # cv2.imshow('bw', im_thresh)
     #cv2.waitKey()
@@ -100,10 +102,12 @@ def find_digit(image):
         peri = cv2.arcLength(c, True)
         approx = cv2.approxPolyDP(c, 0.1 * peri, True)
         if len(approx) == 4 and contour_filter(approx):
-            # cv2.drawContours(image, [approx], -1, (0,255,0), 3)
+            # contours = image.copy()
+            # cv2.drawContours(contours, [approx], -1, (0,255,0), 3)
             # cv2.imshow('countours drawn', image)
             # cv2.waitKey()
             # cv2.imwrite('countour.jpg', image)
+            # cv2.imwrite(os.path.join(sys.argv[2], 'contour.jpg'), contours)
             # print("time elapsed", time.time() - start_time)
             return approx
 
@@ -133,18 +137,25 @@ def transform(image, contour, image_size):
     return cv2.warpPerspective(image,M,(image_size,image_size))
 
 def usage(programname):
-    print("Usage: {} input-image transformed-output-image" % programname)
+    print("Usage: {} input-image output-dir" % programname)
 
 def main(argv):
     if len(argv) <= 2:
         usage(argv[0])
         sys.exit(1)
 
+
+    if not os.path.exists(argv[2]):
+        os.makedirs(argv[2])
+
     img = cv2.imread(argv[1])
+    # cv2.imwrite(os.path.join(argv[2], "orig.jpg"), img)
     position_rectangle = find_digit(img)
     transformed = transform(img, position_rectangle, 100)
     # cv2.imshow('transformed', transformed)
     # cv2.waitKey()
+
+    # cv2.imwrite(os.path.join(argv[2], "transformed.jpg"), transformed)
     cv2.imwrite(argv[2], transformed)
 
 if __name__ == '__main__':
