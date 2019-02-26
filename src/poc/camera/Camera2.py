@@ -24,19 +24,22 @@ import datetime
 #    
 #finally:
 #    camera.stop_preview()
-count = 30
+count = 300
 # Set up 40 in-memory streams
 outputs = [io.BytesIO() for i in range(count)]
 start = time.time()
 camera.capture_sequence(outputs, 'jpeg', use_video_port=True)
+# for filename in camera.capture_continuous('/home/pi/testcase-2/img{timestamp:%Y-%m-%d-%H-%M-%S-%f}.jpg', use_video_port=True):
+#     print('Captured %s' % filename)
 finish = time.time()
 # How fast were we?
 print('Captured '+ str(count) +' images at %.2ffps' % (count / (finish - start)))
+
 for test in outputs:
     count = count + 1
     test.seek(0)
     image = Image.open(test)
-    image.save('/home/pi/Schreibtisch/test/fahrend_' + str(datetime.datetime.now()) + '.jpg')
+    image.save('/home/pi/testcase-2/fahrend_' + str(datetime.datetime.now()) + '.jpg')
 
 t2 = datetime.datetime.now()
 delta = t2 - t1
